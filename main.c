@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 
-int	words_counter(int ac, char **av)
+static int	words_counter(int ac, char **av)
 {
 	int i = 1;
 	int n = 0;
@@ -21,7 +21,7 @@ int	words_counter(int ac, char **av)
 	}
 	return count;
 }
-void	words_copy(int ac, char **av,char **tokens)
+static void	words_copy(int ac, char **av,char **tokens)
 {
 	int	i = 1;
 	int	n = 0;
@@ -54,6 +54,18 @@ int	main(int ac, char **av)
 	char **tokens = malloc(sizeof(char *) * (word_count+1));
 	int index = 0;
 	words_copy(ac,av,tokens);
+	int *tmp = NULL;
+	while(tokens[index][n])
+	{
+		if(!ft_isdigit(tokens[index][n]))
+			return printf("error");
+		n++;
+	}
+	tmp = malloc(sizeof(int));
+	*tmp = ft_atoi(tokens[index]);
+	t_list *head = ft_lstnew(tmp);
+	index++;
+	t_list *store = head;
 	while(tokens[index]!=NULL)
 	{
 		n = 0;
@@ -63,6 +75,18 @@ int	main(int ac, char **av)
 				return printf("error");
 			n++;
 		}
-		printf("%s\n",tokens[index++]);
+		tmp = malloc(sizeof(int));
+		*tmp = ft_atoi(tokens[index]);
+		while(head != NULL)
+		{
+			if(*(int*)(head->content) == *tmp)
+				return printf("error");
+			head = head->next;
+		}
+		head = store;
+		ft_lstadd_back(&head,ft_lstnew(tmp));
+		index++;
+
 	}
+	printf("correct");
 }
